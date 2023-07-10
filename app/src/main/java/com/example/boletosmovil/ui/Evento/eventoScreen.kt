@@ -69,26 +69,26 @@ fun EventoRow(
                     Spacer(modifier = Modifier.padding(8.dp))
                     Text(
                         text = "Id: ${evento.eventoId}",
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = Color.Black
                     )
                     Spacer(modifier = Modifier.padding(8.dp))
                     Text(
                         text = "Fecha: ${evento.fecha}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color.DarkGray
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Black
                     )
                     Spacer(modifier = Modifier.padding(8.dp))
                     Text(
                         text = "Descripción: ${evento.descripcion}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color.DarkGray
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Black
                     )
                     Spacer(modifier = Modifier.padding(8.dp))
                     Text(
                         text = "Ubicación: ${evento.ubicacion}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color.DarkGray
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Black
                     )
                     Spacer(modifier = Modifier.padding(16.dp))
                     Button(

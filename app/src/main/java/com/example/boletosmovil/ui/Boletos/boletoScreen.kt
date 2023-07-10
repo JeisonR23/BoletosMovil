@@ -62,51 +62,51 @@ fun boletoScreen(navHostController: NavHostController, viewModel: eventoViewMode
     }
 
 }
-
 @Composable
 fun BoletoRow(navController: NavHostController, boleto: boletosDto, viewModel: eventoViewModel = hiltViewModel()) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Surface(color = MaterialTheme.colorScheme.onPrimary) {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = MaterialTheme.shapes.medium,
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = "Cantidad Boletos ${boleto.cantidadBoletos}",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = Color.Black
-                    )
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    Text(
-                        text = "Precio: ${boleto.price}",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = Color.Black
-                    )
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    Text(
-                        text = "Tipo Asiento: ${boleto.tipoAsiento}",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = Color.DarkGray
-                    )
+    if (boleto.cantidadBoletos > 0) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Surface(color = Color.Transparent) {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium,
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(
+                            text = "Cantidad Boletos ${boleto.cantidadBoletos}",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Color.Black
+                        )
+                        Spacer(modifier = Modifier.padding(8.dp))
+                        Text(
+                            text = "Precio: ${boleto.price}",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Color.Black
+                        )
+                        Spacer(modifier = Modifier.padding(8.dp))
+                        Text(
+                            text = "Tipo Asiento: ${boleto.tipoAsiento}",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Color.Black
+                        )
 
-                    Spacer(modifier = Modifier.padding(16.dp))
-                    Button(
-                        onClick = {
+                        Spacer(modifier = Modifier.padding(16.dp))
+                        Button(
+                            onClick = {
+                                viewModel.Comprar(boleto.boletoId)
                                 viewModel.GuardarB(respuesta = boletosEntity(
                                     response = boleto.boletoId
                                 ))
-                            navController.navigate("compraScreen")
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(text = "Reservar")
+                                navController.navigate("compraScreen")
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(text = "Comprar")
+                        }
                     }
+                    Divider(color = Color.Blue, thickness = 1.dp)
                 }
-                Divider(color = Color.Blue, thickness = 1.dp)
             }
         }
     }
 }
-
-

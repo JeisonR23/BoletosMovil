@@ -1,8 +1,6 @@
 package com.example.boletosmovil.ui.Evento
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.boletosmovil.data.local.entity.boletosEntity
@@ -26,10 +24,17 @@ data class eventoListUiState(
 )
 
 data class boletoUiState(
-val boletoId: Long = 0L,
-val cantidadBoletos: Int = 0,
-val price: Double = 0.0,
-val tipoAsiento: String = ""
+    val boletoId: Long = 0L,
+    val cantidadBoletos: Int = 0,
+    val price: Double = 0.0,
+    val tipoAsiento: String = "",
+    val evento: eventosDto = eventosDto(
+       0L,
+        "",
+        "",
+        "",
+        ""
+    )
 )
 
 data class boletosListUiState(
@@ -47,10 +52,51 @@ class eventoViewModel @Inject constructor(
     private val _uiStateB = MutableStateFlow(boletosListUiState())
     val uiStateB: StateFlow<boletosListUiState> = _uiStateB.asStateFlow()
 
-    private val uiStateBoleto = MutableStateFlow(boletoUiState())
-    val _uiStateBoleto: StateFlow<boletoUiState> = uiStateBoleto.asStateFlow()
+    private val _uiStateBoleto = MutableStateFlow(boletoUiState())
+    val uiStateBoleto: StateFlow<boletoUiState> = _uiStateBoleto.asStateFlow()
+
+    val cantidadBoletos = mutableStateOf(0)
 
     init {
+        viewModelScope.launch(Dispatchers.IO) {
+            val respuesta = respuestas.getRespuestaB()
+            val resE = respuestas.getRespuesta()
+            println(resE)
+            try {
+                val response = repository.getBoletosById(respuesta.response)
+                val boletos = response.body()
+                _uiStateBoleto.value = _uiStateBoleto.value.copy(
+                    respuesta.response,
+                    cantidadBoletos = boletos?.cantidadBoletos ?: 0,
+                    price = boletos?.price ?: 0.0,
+                    tipoAsiento = boletos?.tipoAsiento ?: "",
+                    evento= eventosDto(
+                        eventoId = resE.response,
+                        "",
+                        "",
+                        "",
+                        ""
+                    )
+
+
+                )
+            } catch (e: Exception) {
+                _uiStateBoleto.value = _uiStateBoleto.value.copy(
+                    boletoId = 0L,
+                    cantidadBoletos = 0,
+                    price = 0.0,
+                    tipoAsiento = "",
+                    evento= eventosDto(
+                        0,
+                        "" ,
+                        "",
+                        "",
+                        ""
+                    )
+                )
+
+            }
+        }
         viewModelScope.launch {
             _uiState.getAndUpdate {
                 try {
@@ -74,10 +120,6 @@ class eventoViewModel @Inject constructor(
                 }
             }
         }
-
-
-
-
     }
 
     fun Reservar(evento: Long) {
@@ -103,5 +145,26 @@ class eventoViewModel @Inject constructor(
             respuestas.insert(respuesta)
         }
     }
+
+
+    suspend fun postBoleto(boleto: boletosDto, boletoid: Long) {
+        try {
+            repository.postBoletos(boleto, boletoid)
+        } catch (e: Exception) {
+
+        }
+    }
+
+    fun actualizarBoleto(boleto: boletosDto) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val respuesta = respuestas.getRespuestaB()
+            try {
+                postBoleto(boleto, respuesta.response)
+            } catch (e: Exception) {
+                println("No se actuazliso")
+            }
+        }
+    }
+
 
 }

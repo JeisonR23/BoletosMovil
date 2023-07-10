@@ -1,5 +1,4 @@
 package com.example.boletosmovil.data.remote.dto
-
 import com.squareup.moshi.JsonClass
 
 
@@ -8,6 +7,6 @@ data class boletosDto(
     val boletoId: Long,
     val cantidadBoletos: Int,
     val price: Double,
-    val tipoAsiento: String
-
+    val tipoAsiento: String,
+    val evento: eventosDto
 )

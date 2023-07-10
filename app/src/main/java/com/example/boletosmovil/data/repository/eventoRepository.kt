@@ -20,7 +20,7 @@ class eventoRepository @Inject constructor(
         }
     }
 
-    suspend fun getBoletosById(id: Long) : boletosDto
+    suspend fun getBoletosById(id: Long) : Response<boletosDto>
     {
         try {
             return api.getBoletosById(id)
@@ -38,6 +38,24 @@ class eventoRepository @Inject constructor(
             throw e
         }
     }
+
+    suspend fun postBoletos(boleto: boletosDto, boletoid: Long): boletosDto? {
+        return try {
+            withContext(Dispatchers.IO) {
+                val response = api.updateBoleto(boletoid, boleto)
+                if (response.isSuccessful) {
+                    response.body()
+                } else {
+                    null
+                }
+            }
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
+
+
 
 
 }
